@@ -24,7 +24,7 @@ public class JpaDemoApp {
 		boolean reviewer = Console.getBoolean("Reviewer:  "); 
 		boolean admin = Console.getBoolean("Admin:  ");
 		User u2 = new User(userName, password, firstName, lastName, phoneNumber, email, reviewer, admin);
-		//u2.setDateCreated(new Timestamp(System.currentTimeMillis()));
+		u2.setDateCreated(new Timestamp(System.currentTimeMillis()));
 		
 		if (UserDB.addUser(u2)) {
 			System.out.println("User successfully added!");
