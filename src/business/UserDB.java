@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import db.DBUtil;
 
@@ -13,8 +14,8 @@ public class UserDB {
 	public static ArrayList<User> getAllUsers() {
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
 		try {
-			Query query = em.createQuery("SELECT u FROM User u");
-			ArrayList<User> allUsers = new ArrayList<>(query.getResultList());
+			TypedQuery<User> query = em.createQuery("SELECT u FROM User u",User.class);
+			ArrayList<User> allUsers = new ArrayList<User>(query.getResultList());
 			return allUsers;
 		}
 		finally {

@@ -3,6 +3,8 @@ package ui;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import business.PurchaseRequest;
+import business.PurchaseRequestDB;
 import business.User;
 import business.UserDB;
 import util.Console;
@@ -19,6 +21,7 @@ public class JpaDemoApp {
 			System.out.println("add     - add user");
 			System.out.println("del     - delete user by id");
 			System.out.println("update  - update user");
+			System.out.println("pr      - get purchase request");
 			System.out.println("exit    - exit app");
 			System.out.println();
 			choice = Console.getString("Option?:  ");
@@ -37,6 +40,9 @@ public class JpaDemoApp {
 			}
 			else if (choice.equals("update")) {
 				updateUser();
+			}
+			else if (choice.equals("pr")) {
+				getPR();
 			}
 		}
 		System.out.println("Bye!");
@@ -94,5 +100,12 @@ public class JpaDemoApp {
 			System.out.println("User '"+u.getUserName()+"' successfully updated!");
 		}
 		System.out.println();
+	}
+	
+	private static void getPR() {
+		int prID = Console.getInt("Enter id of pr to retrieve: ");
+		PurchaseRequest pr = PurchaseRequestDB.getPRById(prID);
+		System.out.println("PR:  "+pr);
+		System.out.println("bye");
 	}
 }
