@@ -18,6 +18,7 @@ public class JpaDemoApp {
 			System.out.println("get     - get user by id");
 			System.out.println("add     - add user");
 			System.out.println("del     - delete user by id");
+			System.out.println("update  - update user");
 			System.out.println("exit    - exit app");
 			System.out.println();
 			choice = Console.getString("Option?:  ");
@@ -34,7 +35,9 @@ public class JpaDemoApp {
 			else if (choice.equals("del")) {
 				deleteUser();
 			}
-	
+			else if (choice.equals("update")) {
+				updateUser();
+			}
 		}
 		System.out.println("Bye!");
 	}
@@ -78,6 +81,17 @@ public class JpaDemoApp {
 		User u = UserDB.getUserById(userId);
 		if(UserDB.deleteUser(u)) {
 			System.out.println("User '"+u.getUserName()+"' successfully deleted!");
+		}
+		System.out.println();
+	}
+
+	private static void updateUser() {
+		int userId = Console.getInt("Enter userID to update:  ");
+		User u = UserDB.getUserById(userId);
+		String fName = Console.getString("Enter new value for first name:  ");
+		u.setFirstName(fName);
+		if(UserDB.updateUser(u)) {
+			System.out.println("User '"+u.getUserName()+"' successfully updated!");
 		}
 		System.out.println();
 	}

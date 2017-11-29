@@ -74,4 +74,25 @@ public class UserDB {
 		}
 		return success;
 	}
+
+	public static boolean updateUser(User u) {
+		boolean success = false;
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction et = em.getTransaction();
+		
+		try {
+			et.begin();
+			em.merge(u);
+			et.commit();
+			success = true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			et.rollback();
+		}
+		finally {
+			em.close();
+		}
+		return success;
+	}
 }
