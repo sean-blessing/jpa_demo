@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @Entity
 public class User implements Serializable {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	//@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	private String userName;
 	private String password;
