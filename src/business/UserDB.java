@@ -42,6 +42,7 @@ public class UserDB {
 		try {
 			et.begin();
 			em.persist(u);
+			//em.flush();
 			et.commit();
 			success = true;
 		}

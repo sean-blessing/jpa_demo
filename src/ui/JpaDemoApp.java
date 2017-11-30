@@ -77,7 +77,7 @@ public class JpaDemoApp {
 		u.setDateCreated(new Timestamp(System.currentTimeMillis()));
 		
 		if (UserDB.addUser(u)) {
-			System.out.println("User '"+u.getUserName()+"' successfully added!");
+			System.out.println("User '"+u.getUserName()+"', id="+u.getId()+" successfully added!");
 		}
 		System.out.println();
 	}
