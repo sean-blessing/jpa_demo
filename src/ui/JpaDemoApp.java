@@ -2,16 +2,22 @@ package ui;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import business.PurchaseRequest;
 import business.PurchaseRequestDB;
+import business.Status;
+import business.StatusDB;
 import business.User;
 import business.UserDB;
 import util.Console;
 
 public class JpaDemoApp {
+	// Keep a cache of Status records, key=id value=description
+	private static HashMap<Integer, String> statusMap;
 
 	public static void main(String[] args) {
+		//initializeStatusMap();
 		System.out.println("JPA Demo");
 		String choice = "";
 		while (!choice.equalsIgnoreCase("exit")) {
@@ -22,6 +28,7 @@ public class JpaDemoApp {
 			System.out.println("del     - delete user by id");
 			System.out.println("update  - update user");
 			System.out.println("pr      - get purchase request");
+			System.out.println("status  - get all status records");
 			System.out.println("exit    - exit app");
 			System.out.println();
 			choice = Console.getString("Option?:  ");
@@ -40,6 +47,9 @@ public class JpaDemoApp {
 			}
 			else if (choice.equals("update")) {
 				updateUser();
+			}
+			else if (choice.equals("status")) {
+				getAllStatus();
 			}
 			else if (choice.equals("pr")) {
 				getPR();
@@ -62,6 +72,23 @@ public class JpaDemoApp {
 			System.out.println(u);
 		}
 		System.out.println();
+	}
+
+	private static void getAllStatus() {
+		ArrayList<Status> status = StatusDB.getAllStatus();
+		System.out.println("All status records:");
+		for (Status s:status) {
+			System.out.println(s);
+		}
+		System.out.println();
+	}
+
+	private static void initializeStatusMap() {
+		statusMap = new HashMap<>();
+		ArrayList<Status> status = StatusDB.getAllStatus();
+		for (Status s:status) {
+			statusMap.put(s.getId(), s.getDescription());
+		}
 	}
 
 	private static void addUser() {
@@ -105,6 +132,8 @@ public class JpaDemoApp {
 	private static void getPR() {
 		int prID = Console.getInt("Enter id of pr to retrieve: ");
 		PurchaseRequest pr = PurchaseRequestDB.getPRById(prID);
+		//String desc = statusMap.get(pr.getStatusId());
+		//System.out.println("PR:  "+pr+" status desc = "+desc);
 		System.out.println("PR:  "+pr);
 		System.out.println("bye");
 	}

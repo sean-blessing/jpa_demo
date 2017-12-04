@@ -5,6 +5,7 @@
 		<class>business.User</class>
 		<class>business.PurchaseRequest</class>
 		<class>business.PurchaseRequestLineItem</class>
+		<class>business.Status</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 	      <property name="javax.persistence.jdbc.url" 
@@ -17,7 +18,7 @@
 	                value="com.mysql.jdbc.Driver"/>
 	      <property name="javax.persistence.schema-generation.database.action" 
 	                value="none"/>
-	      <property name="eclipselink.ddl-generation" value="create-tables"/>
+<!--      <property name="eclipselink.ddl-generation" value="create-tables"/> -->
 	    </properties>
 	</persistence-unit>
 </persistence>

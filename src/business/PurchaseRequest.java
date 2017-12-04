@@ -23,6 +23,9 @@ public class PurchaseRequest implements Serializable {
 	@JoinColumn(name="UserID") 
 	private User user;
 	private String description;
+	@ManyToOne
+	@JoinColumn(name="StatusID") 
+	private Status status;
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="PurchaseRequestID")
 	private ArrayList<PurchaseRequestLineItem> lineItems;
@@ -31,10 +34,11 @@ public class PurchaseRequest implements Serializable {
 		
 	}
 	
-	public PurchaseRequest(int id, User user, String description) {
+	public PurchaseRequest(int id, User user, String description, Status status) {
 		this.id = id;
 		this.user = user;
 		this.description = description;
+		this.status = status;
 	}
 
 	public int getId() {
@@ -57,6 +61,14 @@ public class PurchaseRequest implements Serializable {
 		this.description = description;
 	}
 
+	public Status getStatusId() {
+		return status;
+	}
+
+	public void setStatusId(Status status) {
+		this.status = status;
+	}
+
 	public ArrayList<PurchaseRequestLineItem> getLineItems() {
 		return lineItems;
 	}
@@ -68,7 +80,7 @@ public class PurchaseRequest implements Serializable {
 	@Override
 	public String toString() {
 		return "PurchaseRequest [id=" + id + ", \nuser=" + user + ", description=" + description + ", "
-				+ "\nlineItems="+lineItems+"]";
+				+ "status="+status+ "\nlineItems="+lineItems+"]";
 	}
 	
 }
