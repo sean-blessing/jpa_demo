@@ -4,8 +4,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import business.Product;
+import business.ProductDB;
 import business.PurchaseRequest;
 import business.PurchaseRequestDB;
+import business.PurchaseRequestLineItem;
 import business.Status;
 import business.StatusDB;
 import business.User;
@@ -15,6 +18,7 @@ import util.Console;
 public class JpaDemoApp {
 	// Keep a cache of Status records, key=id value=description
 	private static HashMap<Integer, String> statusMap;
+	private static User validatedUser;
 
 	public static void main(String[] args) {
 		//initializeStatusMap();
@@ -22,17 +26,27 @@ public class JpaDemoApp {
 		String choice = "";
 		while (!choice.equalsIgnoreCase("exit")) {
 			System.out.println("Options:");
-			System.out.println("all     - get all users");
-			System.out.println("get     - get user by id");
-			System.out.println("add     - add user");
-			System.out.println("del     - delete user by id");
-			System.out.println("update  - update user");
-			System.out.println("pr      - get purchase request");
-			System.out.println("status  - get all status records");
+			if (validatedUser==null) {
+				System.out.println("login   - login");	
+			}
+			else {
+				System.out.println("all     - get all users");
+				System.out.println("get     - get user by id");
+				System.out.println("add     - add user");
+				System.out.println("del     - delete user by id");
+				System.out.println("update  - update user");
+				System.out.println("pr      - get purchase request");
+				System.out.println("newpr   - enter new pr request");
+				System.out.println("prli    - enter pr line items");
+				System.out.println("status  - get all status records");
+			}
 			System.out.println("exit    - exit app");
 			System.out.println();
 			choice = Console.getString("Option?:  ");
 			
+			if (choice.equals("login")) {
+				login();
+			}
 			if (choice.equals("get")) {
 				getUser();
 			}
@@ -51,6 +65,12 @@ public class JpaDemoApp {
 			else if (choice.equals("status")) {
 				getAllStatus();
 			}
+			else if (choice.equals("newpr")) {
+				enterPR();
+			}
+			else if (choice.equals("prli")) {
+				enterPRLineItems();
+			}
 			else if (choice.equals("pr")) {
 				getPR();
 			}
@@ -58,6 +78,19 @@ public class JpaDemoApp {
 		System.out.println("Bye!");
 	}
 
+	public static void login() {
+		System.out.println("User Login");
+		String userName = Console.getString("Username: ");
+		String password = Console.getString("Password: ");
+		validatedUser = UserDB.authenticateUser(userName, password);
+		if (validatedUser!= null) {
+			System.out.println("\nSuccess: you are logged in.");
+			System.out.println(validatedUser);
+			}
+		else {
+			System.out.println("Invalid username/password combination");
+		}
+	}
 	private static void getUser() {
 		int userId = Console.getInt("Enter userID to retrieve:  ");
 		User u = UserDB.getUserById(userId);
@@ -137,4 +170,77 @@ public class JpaDemoApp {
 		System.out.println("PR:  "+pr);
 		System.out.println("bye");
 	}
+	
+	private static void enterPR() {
+		PurchaseRequest pr = new PurchaseRequest();
+		String desc = Console.getLine("Description:  ");
+		String just = Console.getLine("Justification:  ");
+		String dateNeededStr = Console.getString("Date needed by (YYYY-MM-DD):	");
+		Timestamp dateNeeded = Console.getTimestampFromYYYYMMDD(dateNeededStr);
+		String dlvMode = Console.getString("Delivery Mode:   ");
+		Status s = StatusDB.getStatusById(1);
+		
+		pr.setUser(validatedUser);
+		pr.setDescription(desc);
+		pr.setJustification(just);
+		pr.setDateNeeded(dateNeeded);
+		pr.setDeliveryMode(dlvMode);
+		pr.setStatus(s);
+		pr.setSubmittedDate(new Timestamp(System.currentTimeMillis()));
+		if (PurchaseRequestDB.addPurchaseRequest(pr)) {
+			System.out.println("Success!  Added PR.");
+			System.out.println("PR details:"+pr);
+		}
+		else {
+			System.out.println("Problem adding PR.");
+		}
+
+	}
+	
+	private static void enterPRLineItems() {
+		ArrayList<PurchaseRequestLineItem> prlis = new ArrayList<>();
+		// get pr for id user enters
+		int prID = Console.getInt("Enter pr id:  ");
+		PurchaseRequest pr = PurchaseRequestDB.getPRById(prID);
+		System.out.println("PurchaseRequest: id="+pr.getId()+", desc="+pr.getDescription());
+		
+		String choice = "y";
+		double newTotal = 0.0;
+		while (choice.equalsIgnoreCase("y")) {
+		
+			// list products
+			System.out.println("Product selection:  ");
+			System.out.println("====================");
+			ArrayList<Product> products = ProductDB.getProducts();
+			for (Product p: products) {
+				System.out.println("ID="+p.getId()+", part#="+p.getPartNumber()+", name="+p.getName()+", price="+p.getPrice());
+			}
+			System.out.println();
+			
+			// choose product, enter qty
+			int pdtId = Console.getInt("Product ID:  ");
+			Product p = ProductDB.getProductById(pdtId);
+			int qty = Console.getInt("Quantity?:  ");
+			newTotal += p.getPrice() * qty;
+			
+			// Create prli and add to list
+			PurchaseRequestLineItem prli = new PurchaseRequestLineItem(pr.getId(), p.getId(), qty);
+			prlis.add(prli);
+			choice = Console.getString("Continue?:  ");
+		}		
+		// update PR
+		pr.setSubmittedDate(new Timestamp(System.currentTimeMillis()));
+		pr.setTotal(newTotal);
+		if (PurchaseRequestDB.updatePurchaseRequest(pr))
+			System.out.println("PR updated successfully!");
+		else
+			System.out.println("Error updating PR.");
+		
+		// insert prlis
+		if (PurchaseRequestDB.addPurchaseRequestLineItems(prlis))
+			System.out.println("PR Line Items added successfully!");
+		else
+			System.out.println("Issue adding PR Line Items");
+	}
+	
 }

@@ -1,4 +1,5 @@
 package util;
+import java.sql.Timestamp;
 import java.util.Scanner;
 
 public class Console {
@@ -9,6 +10,12 @@ public class Console {
         System.out.print(prompt);
         String s = sc.next();  // read user entry
         sc.nextLine();  // discard any other data entered on the line
+        return s;
+    }
+
+    public static String getLine(String prompt) {
+        System.out.print(prompt);
+        String s = sc.nextLine();  // read user entry
         return s;
     }
 
@@ -96,5 +103,11 @@ public class Console {
             }
         }
         return b;
-}
+    }
+    
+    public static Timestamp getTimestampFromYYYYMMDD(String dateStr) {
+    	String timestampStr = dateStr+" 00:00:00";
+        Timestamp ts = Timestamp.valueOf(timestampStr);
+        return ts;
+    }
 }

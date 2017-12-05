@@ -18,6 +18,12 @@ public class PurchaseRequestLineItem {
 		quantity = 0;
 	}
 	
+	public PurchaseRequestLineItem(int inPrID, int inPdtID, int inQty) {
+		purchaseRequestID = inPrID;
+		productID = inPdtID;
+		quantity = inQty;
+	}
+	
 	public PurchaseRequestLineItem(int inID, int inPrID, int inPdtID, int inQty) {
 		id = inID;
 		purchaseRequestID = inPrID;

@@ -11,6 +11,26 @@ import javax.persistence.TypedQuery;
 import db.DBUtil;
 
 public class UserDB {
+	public static User authenticateUser(String uName, String password) {
+		User u = null;
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		String jpql = "SELECT u FROM User u where u.userName = :un and u.password = :pwd";
+        try {
+            TypedQuery <User>query = em.createQuery(jpql, User.class);
+            query.setParameter("un",uName);
+            query.setParameter("pwd",password);
+            u=query.getSingleResult();
+        }
+//        catch (NoResultException nre) {
+//        	nre.printStackTrace();
+//        }
+        finally {
+            em.close();
+        }
+        return u;
+		
+	}
+
 	public static ArrayList<User> getAllUsers() {
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
 		try {

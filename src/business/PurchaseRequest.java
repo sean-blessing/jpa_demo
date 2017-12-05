@@ -1,6 +1,7 @@
 package business;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +18,20 @@ import javax.persistence.OneToMany;
 @Entity
 public class PurchaseRequest implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ManyToOne
 	@JoinColumn(name="UserID") 
 	private User user;
 	private String description;
+	private String justification;
+	private Timestamp dateNeeded;
+	private String deliveryMode;
 	@ManyToOne
 	@JoinColumn(name="StatusID") 
 	private Status status;
+	private double total;
+	private Timestamp submittedDate;
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="PurchaseRequestID")
 	private ArrayList<PurchaseRequestLineItem> lineItems;
@@ -61,12 +67,52 @@ public class PurchaseRequest implements Serializable {
 		this.description = description;
 	}
 
-	public Status getStatusId() {
+	public String getJustification() {
+		return justification;
+	}
+
+	public void setJustification(String justification) {
+		this.justification = justification;
+	}
+
+	public Timestamp getDateNeeded() {
+		return dateNeeded;
+	}
+
+	public void setDateNeeded(Timestamp dateNeeded) {
+		this.dateNeeded = dateNeeded;
+	}
+
+	public String getDeliveryMode() {
+		return deliveryMode;
+	}
+
+	public void setDeliveryMode(String deliveryMode) {
+		this.deliveryMode = deliveryMode;
+	}
+
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatusId(Status status) {
+	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+
+	public Timestamp getSubmittedDate() {
+		return submittedDate;
+	}
+
+	public void setSubmittedDate(Timestamp submittedDate) {
+		this.submittedDate = submittedDate;
 	}
 
 	public ArrayList<PurchaseRequestLineItem> getLineItems() {
