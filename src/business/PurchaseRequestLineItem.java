@@ -2,31 +2,35 @@ package business;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class PurchaseRequestLineItem {
 	@Id
 	private int id;
-	private int purchaseRequestID;
+	@ManyToOne
+	@JoinColumn(name="PurchaseRequestID") 
+	private PurchaseRequest purchaseRequest;
 	private int productID;
 	private int quantity;
 	
 	public PurchaseRequestLineItem() {
 		id = 0;
-		purchaseRequestID = 0;
+		purchaseRequest = null;
 		productID = 0;
 		quantity = 0;
 	}
 	
-	public PurchaseRequestLineItem(int inPrID, int inPdtID, int inQty) {
-		purchaseRequestID = inPrID;
+	public PurchaseRequestLineItem(PurchaseRequest inPr, int inPdtID, int inQty) {
+		purchaseRequest = inPr;
 		productID = inPdtID;
 		quantity = inQty;
 	}
 	
-	public PurchaseRequestLineItem(int inID, int inPrID, int inPdtID, int inQty) {
+	public PurchaseRequestLineItem(int inID, PurchaseRequest inPr, int inPdtID, int inQty) {
 		id = inID;
-		purchaseRequestID = inPrID;
+		purchaseRequest = inPr;
 		productID = inPdtID;
 		quantity = inQty;
 	}
@@ -37,11 +41,11 @@ public class PurchaseRequestLineItem {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getPurchaseRequestID() {
-		return purchaseRequestID;
+	public PurchaseRequest getPurchaseRequest() {
+		return purchaseRequest;
 	}
-	public void setPurchaseRequestID(int purchaseRequestID) {
-		this.purchaseRequestID = purchaseRequestID;
+	public void setPurchaseRequest(PurchaseRequest purchaseRequest) {
+		this.purchaseRequest = purchaseRequest;
 	}
 	public int getProductID() {
 		return productID;
@@ -58,7 +62,7 @@ public class PurchaseRequestLineItem {
 
 	@Override
 	public String toString() {
-		return "\npurchaseRequestLineItem [id=" + id + ", purchaseRequestID=" + purchaseRequestID + ", productID="
+		return "\npurchaseRequestLineItem [id=" + id + ", purchaseRequestID=" + purchaseRequest.getId() + ", productID="
 				+ productID + ", quantity=" + quantity + "]";
 	}
 

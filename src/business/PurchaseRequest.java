@@ -126,7 +126,7 @@ public class PurchaseRequest implements Serializable {
 	@Override
 	public String toString() {
 		return "PurchaseRequest [id=" + id + ", \nuser=" + user + ", description=" + description + ", "
-				+ "status="+status+ "\nlineItems="+lineItems+"]";
+				+ "status="+status+ ", total="+total+"\nlineItems="+lineItems+"]";
 	}
 	
 }

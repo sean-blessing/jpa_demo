@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import db.DBUtil;
 
 public class PurchaseRequestDB {

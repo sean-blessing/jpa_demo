@@ -167,6 +167,7 @@ public class JpaDemoApp {
 		PurchaseRequest pr = PurchaseRequestDB.getPRById(prID);
 		//String desc = statusMap.get(pr.getStatusId());
 		//System.out.println("PR:  "+pr+" status desc = "+desc);
+		System.out.println("PR # of LineItems:"+pr.getLineItems().size());
 		System.out.println("PR:  "+pr);
 		System.out.println("bye");
 	}
@@ -224,7 +225,7 @@ public class JpaDemoApp {
 			newTotal += p.getPrice() * qty;
 			
 			// Create prli and add to list
-			PurchaseRequestLineItem prli = new PurchaseRequestLineItem(pr.getId(), p.getId(), qty);
+			PurchaseRequestLineItem prli = new PurchaseRequestLineItem(pr, p.getId(), qty);
 			prlis.add(prli);
 			choice = Console.getString("Continue?:  ");
 		}		
